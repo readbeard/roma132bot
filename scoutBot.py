@@ -70,10 +70,19 @@ def getNextEvents():
     
 	#just log what you're doing...
 	print('Getting the upcoming 10 events')
-   
+	
+	#getting our calendar's ID from another file...
+	calendar_file = open('scoutBot.conf','r')
+	calendar_string = ""
+	i = 1
+	for line in calendar_file:
+		if i == 2:
+			calendar_string+= line
+		i+=1
+	print(calendar_string)
 	#Passing roma132 calendar's ID and retrieving a list of the next 'maxResults' events..
 	eventsResult = service.events().list(
-        calendarId='e15vmds95rika3c0hjof533af4@group.calendar.google.com', timeMin=now, maxResults=10, singleEvents=True,
+        calendarId= calendar_string, timeMin=now, maxResults=10, singleEvents=True,
         orderBy='startTime').execute()
 	events = eventsResult.get('items', [])
    
