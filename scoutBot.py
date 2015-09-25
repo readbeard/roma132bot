@@ -143,6 +143,10 @@ def main():
 	while True:
 		process(bot)
 
+def generateRandomJungleWord():
+	jungle_file = open('jungle_words','r')
+	lines = jungle_file.read().splitlines()
+	return random.choice(lines)
 
 def process(bot):
 	global LAST_UPDATE_ID
@@ -170,8 +174,15 @@ def process(bot):
 			
 			nextEvents_set = {'prossimi','appuntamenti','riunione','riunioni','uscita','uscite'}
 			infos_set = {'contatti','numero','telefono', 'email'}
+			parola_maestra_set = {'parola','maestra'}
+			isParolaMaestra = 0
 			for w in message.split():
-
+				if( w == 'parola'):
+					isParolaMaestra = 1
+				if( w == 'maestra' and isParolaMaestra == 1):
+					reply+= generateRandomJungleWord();
+					isParolaMaestra = 0
+					break
 				if w in nextEvents_set:
 					reply+= getNextEvents()
 				elif w in infos_set:
