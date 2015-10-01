@@ -24,6 +24,10 @@ from oauth2client import client
 from oauth2client import tools
 LAST_UPDATE_ID = None
 
+SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
+CLIENT_SECRET_FILE = 'client_secret.json'
+APPLICATION_NAME = 'Google Calendar API Python Quickstart'
+
 """	Gets valid user credentials from storage.
 	If nothing has been stored, or if the stored credentials are invalid,
 	the OAuth2 flow is completed to obtain the new credentials.
