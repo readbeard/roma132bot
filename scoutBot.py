@@ -22,21 +22,24 @@ from apiclient import discovery
 import oauth2client
 from oauth2client import client
 from oauth2client import tools
+
 LAST_UPDATE_ID = None
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Calendar API Python Quickstart'
 
-"""	Gets valid user credentials from storage.
+def get_credentials():
+	"""Gets valid user credentials from storage.
 	If nothing has been stored, or if the stored credentials are invalid,
 	the OAuth2 flow is completed to obtain the new credentials.
+
 	Returns:
-	        Credentials, the obtained credential.	"""    
-def get_credentials():
+		Credentials, the obtained credential.	"""
+
 	home_dir = os.path.expanduser('~')
 	credential_dir = os.path.join(home_dir, '.credentials')
-	
+
 	if not os.path.exists(credential_dir):
 		 os.makedirs(credential_dir)
 	credential_path = os.path.join(credential_dir,'calendar-quickstart.json')
@@ -56,11 +59,12 @@ def get_credentials():
 	
 	return credentials
 
-"""	Shows basic usage of the Google Calendar API.
+
+def getNextEvents(calendar_id):
+	"""Shows basic usage of the Google Calendar API.
 	Creates a Google Calendar API service object and outputs a list of the next
 	10 events on the user's calendar.	"""
 
-def getNextEvents(calendar_id):
 	credentials = get_credentials()
 	http = credentials.authorize(httplib2.Http())
 	service = discovery.build('calendar', 'v3', http=http)
@@ -99,17 +103,6 @@ def getInfosFromFile():
 	Returns:
 		a string with the content of the file, line per line.
 	"""
-	'''
-	infos_file = open('catena','r')
-	infos_string = ""
-
-	for line in infos_file:
-		infos_string += line
-
-	infos_file.close()
-
-	return infos_string
-	'''
 	with open('catena', 'r') as f:
 		return reduce(lambda x,y: x+y, f)
 
