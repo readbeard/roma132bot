@@ -22,13 +22,6 @@ from apiclient import discovery
 import oauth2client
 from oauth2client import client
 from oauth2client import tools
-
-try:
-	import argparse
-	flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-	flags = None
-
 LAST_UPDATE_ID = None
 
 """	Gets valid user credentials from storage.
