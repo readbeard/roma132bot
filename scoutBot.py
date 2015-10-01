@@ -16,6 +16,8 @@ from datetime import datetime as dt
 import httplib2
 import os
 
+from telegram import TelegramError
+import re
 from apiclient import discovery
 import oauth2client
 from oauth2client import client
@@ -157,7 +159,8 @@ def process(bot):
 		chat_id = update.message.chat_id
 		username = update.message.from_user
 		message = update.message.text.lower()
-
+		reply = ""
+		
 		if (message):
 			# Updates global offset to get the new updates
 			LAST_UPDATE_ID = update.update_id + 1
@@ -168,28 +171,20 @@ def process(bot):
 
 			# Remove my name from message and leading spaces
 			message = message[9:].lstrip()
-			reply = ""
 
 			# Check for specific commands
-			
-			nextEvents_set = {'prossimi','appuntamenti','riunione','riunioni','uscita','uscite'}
-			infos_set = {'contatti','numero','telefono', 'email'}
-			parola_maestra_set = {'parola','maestra'}
-			isParolaMaestra = 0
-			for w in message.split():
-				if( w == 'parola'):
-					isParolaMaestra = 1
-				if( w == 'maestra' and isParolaMaestra == 1):
-					reply+= generateRandomJungleWord();
-					isParolaMaestra = 0
-					break
-				if w in nextEvents_set:
-					reply+= getNextEvents()
-				elif w in infos_set:
-					reply+= getInfosFromFile()
-				else:
-					reply+= ""
-		bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'))
+			if re.match('.*parola maestra.*',message):
+				reply+= generateRandomJungleWord()
+			elif re.match('.*appuntamenti.*',message) or re.match('.*riunione.*', message) or re.match('.*uscita.*', message):
+				reply+= getNextEvents()
+			elif re.match(".*contatti.*", message):
+				reply+= getInfosFromFile()
+			else:
+				reply+= "come?"	
+		try:
+			bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'))
+		except TelegramError, e:
+			print(e)
 
 if __name__ == '__main__':
     main()
