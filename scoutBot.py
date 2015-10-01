@@ -15,7 +15,7 @@ import datetime
 from datetime import datetime as dt
 import httplib2
 import os
-
+from config_utils import load_configs
 from telegram import TelegramError
 import re
 from apiclient import discovery
@@ -56,7 +56,7 @@ def get_credentials():
 	Creates a Google Calendar API service object and outputs a list of the next
 	10 events on the user's calendar.	"""
 
-def getNextEvents():
+def getNextEvents(calendar_id):
 	credentials = get_credentials()
 	http = credentials.authorize(httplib2.Http())
 	service = discovery.build('calendar', 'v3', http=http)
@@ -66,19 +66,8 @@ def getNextEvents():
 	#just log what you're doing...
 	print('Getting the upcoming 10 events')
 	
-	#getting our calendar's ID from another file...
-	calendar_file = open('scoutBot.conf','r')
-	calendar_string = ""
-	i = 1
-	for line in calendar_file:
-		if i == 2:
-			calendar_string+= line
-		i+=1
-	print(calendar_string)
 	#Passing roma132 calendar's ID and retrieving a list of the next 'maxResults' events..
-	eventsResult = service.events().list(
-        calendarId= calendar_string, timeMin=now, maxResults=10, singleEvents=True,
-        orderBy='startTime').execute()
+	eventsResult = service.events().list(calendarId=calendar_id, timeMin=now, maxResults=10, singleEvents=True, orderBy='startTime').execute()
 	events = eventsResult.get('items', [])
    
 	#creating string representing next events, new line for each event...
@@ -121,10 +110,15 @@ def main():
 
 	logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
+	global calendar_id
+	config_default = {'telegram_bot_token': None,
+			  'calendar_id': None}
+	conf = load_configs(envvar_prefix="SB_", path='scoutBot.conf', defaults=config_default)
 	# Load the authorization token
-	with open('scoutBot.conf', 'r') as f:
-		token_string = f.readline().rstrip()
-
+	token_string = conf['telegram_bot_token']
+	calendar_id = conf['calendar_id']
+	from pprint import pprint
+	pprint(conf)
 	# Telegram Bot Authorization Token
 	bot = telegram.Bot(token_string)
 
@@ -169,7 +163,7 @@ def process(bot):
 			if re.match('.*parola maestra.*',message):
 				reply+= generateRandomJungleWord()
 			elif re.match('.*appuntamenti.*',message) or re.match('.*riunione.*', message) or re.match('.*uscita.*', message):
-				reply+= getNextEvents()
+				reply+= getNextEvents(calendar_id)
 			elif re.match(".*contatti.*", message):
 				reply+= getInfosFromFile()
 			else:
