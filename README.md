@@ -10,8 +10,8 @@ To run the bot, you will need
 
 ### useful notes
 There are three main files to fill with information. The first one, **scoutbot.conf**,is written in JSON and it must contain two objects: *telegram_bot_token* and *calendar_id*. It is mandatory to fill with the following informations:
-- first line: your telegram bot's token
-- second line: the calendar's id of the google calendar you want to retrieve information from
+- first JSONobject: your telegram bot's token
+- second JSONobject: the calendar's id of the google calendar you want to retrieve information from
 
 The second one, *catena*, is read and printed as it is written, and it must contain the infos about scout chiefs of your group. So, you can fill it as you want, preferably in a human-readable manner.
 
