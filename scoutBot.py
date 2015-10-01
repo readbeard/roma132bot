@@ -169,7 +169,7 @@ def process(bot):
 			# Check for specific commands
 			if re.match('.*parola maestra.*',message):
 				reply+= generateRandomJungleWord()
-			elif re.match('.*appuntamenti.*',message) or re.match('.*riunione.*', message) or re.match('.*uscita.*', message):
+			elif re.match('.*(appuntamenti|riunione|uscita).*',message):
 				reply+= getNextEvents(calendar_id)
 			elif re.match(".*contatti.*", message):
 				reply+= getInfosFromFile()
