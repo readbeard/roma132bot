@@ -77,8 +77,7 @@ def getNextEvents(calendar_id):
 	nextEvents=""
    
 	if not events:
-        	print('No upcoming events found.')
-   
+   		nextEvents += 'No upcoming events found'
 	for event in events:
 
 		start = {'dateTime': event['start'].get('dateTime', event['start'].get('dateTime'))}
