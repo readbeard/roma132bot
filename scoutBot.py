@@ -122,11 +122,11 @@ def main():
 	config_default = {'telegram_bot_token': None,
 			  'calendar_id': None}
 	conf = load_configs(envvar_prefix="SB_", path='scoutBot.conf', defaults=config_default)
+	
 	# Load the authorization token
 	token_string = conf['telegram_bot_token']
 	calendar_id = conf['calendar_id']
-	from pprint import pprint
-	pprint(conf)
+	
 	# Telegram Bot Authorization Token
 	bot = telegram.Bot(token_string)
 
