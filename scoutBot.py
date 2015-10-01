@@ -66,7 +66,6 @@ def getNextEvents(calendar_id):
 	service = discovery.build('calendar', 'v3', http=http)
 
 	now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    
 	#just log what you're doing...
 	print('Getting the upcoming 10 events')
 	
@@ -93,12 +92,15 @@ def getNextEvents(calendar_id):
 	
 	return nextEvents;
 
-"""	Reads from a file named "catena" the information about scout chief
-	of the group, such as telephone numbers, emails and so on
-	Returns:
-		a string with the content of the file, line per line.	 """
 
 def getInfosFromFile():
+	"""Reads from a file named "catena" the information about scout chief
+	of the group, such as telephone numbers, emails and so on
+	
+	Returns:
+		a string with the content of the file, line per line.
+	"""
+	'''
 	infos_file = open('catena','r')
 	infos_string = ""
 
@@ -146,7 +148,7 @@ def generateRandomJungleWord():
 
 def process(bot):
 	global LAST_UPDATE_ID
-
+	
 	# Request updates after the last updated_id
 	for update in bot.getUpdates(offset=LAST_UPDATE_ID, timeout=10):
 	# chat_id is required to reply any message
@@ -154,7 +156,6 @@ def process(bot):
 		username = update.message.from_user
 		message = update.message.text.lower()
 		reply = ""
-		
 		if (message):
 			# Updates global offset to get the new updates
 			LAST_UPDATE_ID = update.update_id + 1
