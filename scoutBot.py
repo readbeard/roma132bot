@@ -175,10 +175,10 @@ def process(bot):
 				reply+= getInfosFromFile()
 			else:
 				reply+= "come?"	
-		try:
-			bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'))
-		except TelegramError, e:
-			print(e)
+			try:
+				bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'))
+			except TelegramError, e:
+				print(e) 
 
 if __name__ == '__main__':
     main()
