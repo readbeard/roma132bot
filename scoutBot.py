@@ -104,6 +104,9 @@ def getInfosFromFile():
 	infos_file.close()
 
 	return infos_string
+	'''
+	with open('catena', 'r') as f:
+		return reduce(lambda x,y: x+y, f)
 
 def main():
 	global LAST_UPDATE_ID
