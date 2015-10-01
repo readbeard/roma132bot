@@ -89,8 +89,8 @@ def getNextEvents(calendar_id):
 
 		s = datetime.datetime.strptime(start['dateTime'],"%Y-%m-%dT%H:%M:%S+02:00")
 		e = datetime.datetime.strptime(end['dateTime'],"%Y-%m-%dT%H:%M:%S+02:00")
-
-		nextEvents+= event['summary'] + ": IL GIORNO: {} ALLE ORE: {}".format(s.date().strftime( "%Y/%m/%d"),s.time().strftime( "%I:%M %p"))+", PRESSO: " + event['location'] + "\n"
+		
+		nextEvents+= event['summary'] + ": IL GIORNO: {} ALLE ORE: {}".format(s.date().strftime( "%Y/%m/%d"),s.time().strftime( "%I:%M %p"))+", PRESSO: " + event.get('location',"non definito...") + "\n"
 		nextEvents+= " e si concludera' " + "IL GIORNO: {} ALLE ORE: {}".format(e.date().strftime( "%Y/%m/%d"),e.time().strftime( "%I:%M %p")) + "\n\n"
 	
 	return nextEvents;
