@@ -95,6 +95,13 @@ def getNextEvents(calendar_id):
 	
 	return nextEvents;
 
+def help_message():
+        message =	"Ciao! sono il bot del gruppo scout Rm132. Digita una tra le seguenti parole, in una frase a tuo piacimento che inizi con la parola chiave \'scoutbot\', ed io ti rispondero' adeguatamente!\n\n"
+        parolaMaestra = "parola maestra --- stampa una randomica parola maestra\n"
+        appuntamenti = "uscita, riunione, appuntamenti --- stampa i prossimi appuntamenti del gruppo\n"
+	contatti = "contatti --- stampa i contatti dei capi del gruppo"
+        return message + parolaMaestra + appuntamenti + contatti
+
 
 def getInfosFromFile():
 	"""Reads from a file named "catena" the information about scout chief
@@ -151,7 +158,9 @@ def process(bot):
 		if (message):
 			# Updates global offset to get the new updates
 			LAST_UPDATE_ID = update.update_id + 1
-
+			#check if help was requested
+			if re.match("/help",message):
+                                reply+= help_message()
 			# Check if the user is talking to me
 			if not message.startswith('scoutbot'):
 				continue
