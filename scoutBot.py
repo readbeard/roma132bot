@@ -96,10 +96,10 @@ def getNextEvents(calendar_id):
 	return nextEvents;
 
 def help_message():
-        message =	"Ciao! sono il bot del gruppo scout Rm132. Digita una tra le seguenti parole, in una frase a tuo piacimento che inizi con la parola chiave \'scoutbot\', ed io ti rispondero' adeguatamente!\n\n"
-        parolaMaestra = "parola maestra --- stampa una randomica parola maestra\n"
-        appuntamenti = "uscita, riunione, appuntamenti --- stampa i prossimi appuntamenti del gruppo\n"
-	contatti = "contatti --- stampa i contatti dei capi del gruppo"
+        message =	"Ciao! sono il bot del gruppo scout Rm132. Digita una tra le seguenti parole, in una frase a tuo piacimento che inizi con la parola chiave _scoutbot_, ed io ti rispondero' adeguatamente!\n\n"
+        parolaMaestra = "*parola maestra* --- stampa una randomica parola maestra\n"
+        appuntamenti = "*uscita*, *riunione*, *appuntamenti* --- stampa i prossimi appuntamenti del gruppo\n"
+	contatti = "*contatti* --- stampa i contatti dei capi del gruppo"
         return message + parolaMaestra + appuntamenti + contatti
 
 
@@ -175,9 +175,9 @@ def process(bot):
 				elif re.match(".*contatti.*", message):
 					reply+= getInfosFromFile()
 				else:
-					reply+= "come?"	
+					reply+= "scusa, non ho capito cosa mi hai scritto :("	
 			try:
-				bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'))
+				bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'),parse_mode ="Markdown")
 			except TelegramError, e:
 				print(e) 
 
