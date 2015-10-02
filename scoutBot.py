@@ -162,21 +162,20 @@ def process(bot):
 			if re.match("/help",message):
                                 reply+= help_message()
 			# Check if the user is talking to me
-			if not message.startswith('scoutbot'):
-				continue
+			if message.startswith('scoutbot'):
 
-			# Remove my name from message and leading spaces
-			message = message[9:].lstrip()
+				# Remove my name from message and leading spaces
+				message = message[9:].lstrip()
 
-			# Check for specific commands
-			if re.match('.*parola maestra.*',message):
-				reply+= generateRandomJungleWord()
-			elif re.match('.*(appuntamenti|riunione|uscita).*',message):
-				reply+= getNextEvents(calendar_id)
-			elif re.match(".*contatti.*", message):
-				reply+= getInfosFromFile()
-			else:
-				reply+= "come?"	
+				# Check for specific commands
+				if re.match('.*parola maestra.*',message):
+					reply+= generateRandomJungleWord()
+				elif re.match('.*(appuntamenti|riunione|uscita).*',message):
+					reply+= getNextEvents(calendar_id)
+				elif re.match(".*contatti.*", message):
+					reply+= getInfosFromFile()
+				else:
+					reply+= "come?"	
 			try:
 				bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'))
 			except TelegramError, e:
