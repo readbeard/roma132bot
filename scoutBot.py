@@ -161,6 +161,10 @@ def process(bot):
 			#check if help was requested
 			if re.match("/help",message):
                                 reply+= help_message()
+				try:
+                                        bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'),parse_mode ="Markdown")
+                                except TelegramError, e:
+                                        print(e) 
 			# Check if the user is talking to me
 			if message.startswith('scoutbot'):
 
@@ -176,10 +180,10 @@ def process(bot):
 					reply+= getInfosFromFile()
 				else:
 					reply+= "scusa, non ho capito cosa mi hai scritto :("	
-			try:
-				bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'),parse_mode ="Markdown")
-			except TelegramError, e:
-				print(e) 
+				try:
+					bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'),parse_mode ="Markdown")
+				except TelegramError, e:
+					print(e) 
 
 if __name__ == '__main__':
     main()
