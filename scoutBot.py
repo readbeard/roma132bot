@@ -4,7 +4,7 @@
 # Sono il bot del gruppo scout Rm 132. Sono progettato
 # per rispondere alle domande riguardo gli appuntamenti
 # del gruppo! Digita una domanda chiamandomi 'scoutbot'
-# ed io ti rispondero' tempestivamente! Ad esempio: 
+# ed io ti rispondero' tempestivamente! Ad esempio:
 # "scoutbot, quali sono i prossimi appuntamenti?"
 
 from __future__ import print_function
@@ -56,7 +56,7 @@ def get_credentials():
 		else: # Needed only for compatability with Python 2.6
 			credentials = tools.run(flow, store)
 		print('Storing credentials to ' + credential_path)
-	
+
 	return credentials
 
 
@@ -72,14 +72,14 @@ def getNextEvents(calendar_id):
 	now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 	#just log what you're doing...
 	print('Getting the upcoming 10 events')
-	
+
 	#Passing roma132 calendar's ID and retrieving a list of the next 'maxResults' events..
 	eventsResult = service.events().list(calendarId=calendar_id, timeMin=now, maxResults=10, singleEvents=True, orderBy='startTime').execute()
 	events = eventsResult.get('items', [])
-   
+
 	#creating string representing next events, new line for each event...
 	nextEvents=""
-   
+
 	if not events:
    		nextEvents += 'No upcoming events found'
 	for event in events:
@@ -89,10 +89,10 @@ def getNextEvents(calendar_id):
 
 		s = datetime.datetime.strptime(start['dateTime'],"%Y-%m-%dT%H:%M:%S+02:00")
 		e = datetime.datetime.strptime(end['dateTime'],"%Y-%m-%dT%H:%M:%S+02:00")
-		
+
 		nextEvents+= event['summary'] + ": IL GIORNO: {} ALLE ORE: {}".format(s.date().strftime( "%Y/%m/%d"),s.time().strftime( "%I:%M %p"))+", PRESSO: " + event.get('location',"non definito...") + "\n"
 		nextEvents+= " e si concludera' " + "IL GIORNO: {} ALLE ORE: {}".format(e.date().strftime( "%Y/%m/%d"),e.time().strftime( "%I:%M %p")) + "\n\n"
-	
+
 	return nextEvents;
 
 def help_message():
@@ -106,7 +106,7 @@ def help_message():
 def getInfosFromFile():
 	"""Reads from a file named "catena" the information about scout chief
 	of the group, such as telephone numbers, emails and so on
-	
+
 	Returns:
 		a string with the content of the file, line per line.
 	"""
@@ -122,11 +122,11 @@ def main():
 	config_default = {'telegram_bot_token': None,
 			  'calendar_id': None}
 	conf = load_configs(envvar_prefix="SB_", path='scoutBot.conf', defaults=config_default)
-	
+
 	# Load the authorization token
 	token_string = conf['telegram_bot_token']
 	calendar_id = conf['calendar_id']
-	
+
 	# Telegram Bot Authorization Token
 	bot = telegram.Bot(token_string)
 
@@ -147,7 +147,7 @@ def generateRandomJungleWord():
 
 def process(bot):
 	global LAST_UPDATE_ID
-	
+
 	# Request updates after the last updated_id
 	for update in bot.getUpdates(offset=LAST_UPDATE_ID, timeout=10):
 	# chat_id is required to reply any message
@@ -164,7 +164,7 @@ def process(bot):
 				try:
                                         bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'),parse_mode ="Markdown")
                                 except TelegramError, e:
-                                        print(e) 
+                                        print(e)
 			# Check if the user is talking to me
 			if message.startswith('scoutbot'):
 
@@ -179,11 +179,11 @@ def process(bot):
 				elif re.match(".*contatti.*", message):
 					reply+= getInfosFromFile()
 				else:
-					reply+= "scusa, non ho capito cosa mi hai scritto :("	
+					reply+= "scusa, non ho capito cosa mi hai scritto :("
 				try:
 					bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'),parse_mode ="Markdown")
 				except TelegramError, e:
-					print(e) 
+					print(e)
 
 if __name__ == '__main__':
     main()
