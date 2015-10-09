@@ -3,9 +3,9 @@
 # roma132bot
 # Sono il bot del gruppo scout Rm 132. Sono progettato
 # per rispondere alle domande riguardo gli appuntamenti
-# del gruppo! Digita una domanda chiamandomi 'scoutbot'
+# del gruppo! Digita una domanda chiamandomi 'roma132bot'
 # ed io ti rispondero' tempestivamente! Ad esempio:
-# "scoutbot, quali sono i prossimi appuntamenti?"
+# "roma132bot, quali sono i prossimi appuntamenti?"
 
 from __future__ import print_function
 import logging
@@ -96,7 +96,7 @@ def getNextEvents(calendar_id):
 	return nextEvents;
 
 def help_message():
-        message =	"Ciao! sono il bot del gruppo scout Rm132. Digita una tra le seguenti parole, in una frase a tuo piacimento che inizi con la parola chiave _scoutbot_, ed io ti rispondero' adeguatamente!"
+        message ="Ciao! sono il bot del gruppo scout Rm132. Digita una tra le seguenti parole, in una frase a tuo piacimento che inizi con la parola chiave _roma132bot_, ed io ti rispondero' adeguatamente! (Oppure, digita _/_ e segui i suggerimenti)"
         parolaMaestra = "*parola maestra* --- stampa una randomica parola maestra"
         appuntamenti = "*uscita*, *riunione*, *appuntamenti* --- stampa i prossimi appuntamenti del gruppo"
 	contatti = "*contatti* --- stampa i contatti dei capi del gruppo"
@@ -122,7 +122,7 @@ def main():
 	global calendar_id
 	config_default = {'telegram_bot_token': None,
 			  'calendar_id': None}
-	conf = load_configs(envvar_prefix="SB_", path='scoutBot.conf', defaults=config_default)
+	conf = load_configs(envvar_prefix="SB_", path='roma132bot.conf', defaults=config_default)
 
 	# Load the authorization token
 	token_string = conf['telegram_bot_token']
@@ -176,7 +176,7 @@ def process(bot):
                         	reply+= "scusa, non ho capito cosa mi hai scritto :("
 
                         #Check if human is talking to me
-                        elif message.startswith('scoutbot'):
+                        elif message.startswith('roma132bot'):
 				# Remove my name from message and leading spaces
 				message = message[9:]
 
