@@ -90,18 +90,19 @@ def getNextEvents(calendar_id):
 		s = datetime.datetime.strptime(start['dateTime'],"%Y-%m-%dT%H:%M:%S+02:00")
 		e = datetime.datetime.strptime(end['dateTime'],"%Y-%m-%dT%H:%M:%S+02:00")
 
-		nextEvents+= event['summary'] + ": IL GIORNO: {} ALLE ORE: {}".format(s.date().strftime( "%Y/%m/%d"),s.time().strftime( "%I:%M %p"))+", PRESSO: " + event.get('location',"non definito...") + "\n"
-		nextEvents+= " e si concludera' " + "IL GIORNO: {} ALLE ORE: {}".format(e.date().strftime( "%Y/%m/%d"),e.time().strftime( "%I:%M %p")) + "\n\n"
-
+                delimiter = '---------------------------------------------------------------------\n'
+                nextEvents+= event['summary'] + ": *IL GIORNO:* _{}_ *ALLE ORE:* _{}_".format(s.date().strftime( "%Y/%m/%d"),s.time().strftime( "%I:%M %p"))+", *PRESSO:* " + event.get('location',"non definito...") + "\n"
+		nextEvents+= " e si concludera' " + "*IL GIORNO:* _{}_ *ALLE ORE:* _{}_".format(e.date().strftime( "%Y/%m/%d"),e.time().strftime( "%I:%M %p")) + "\n"+delimiter
 	return nextEvents;
 
 def help_message():
-        message =	"Ciao! sono il bot del gruppo scout Rm132. Digita una tra le seguenti parole, in una frase a tuo piacimento che inizi con la parola chiave _scoutbot_, ed io ti rispondero' adeguatamente!\n\n"
-        parolaMaestra = "*parola maestra* --- stampa una randomica parola maestra\n"
-        appuntamenti = "*uscita*, *riunione*, *appuntamenti* --- stampa i prossimi appuntamenti del gruppo\n"
+        message =	"Ciao! sono il bot del gruppo scout Rm132. Digita una tra le seguenti parole, in una frase a tuo piacimento che inizi con la parola chiave _scoutbot_, ed io ti rispondero' adeguatamente!"
+        parolaMaestra = "*parola maestra* --- stampa una randomica parola maestra"
+        appuntamenti = "*uscita*, *riunione*, *appuntamenti* --- stampa i prossimi appuntamenti del gruppo"
 	contatti = "*contatti* --- stampa i contatti dei capi del gruppo"
-        return message + parolaMaestra + appuntamenti + contatti
-
+        commands = (parolaMaestra, appuntamenti, contatti)
+        commands_str = reduce(lambda x,y: x + "\n" + y, commands)
+        return "{}\n\n{}\n".format(message, commands_str)
 
 def getInfosFromFile():
 	"""Reads from a file named "catena" the information about scout chief
@@ -158,32 +159,43 @@ def process(bot):
 		if (message):
 			# Updates global offset to get the new updates
 			LAST_UPDATE_ID = update.update_id + 1
-			#check if help was requested
-			if re.match("/help",message):
-                                reply+= help_message()
-				try:
-                                        bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'),parse_mode ="Markdown")
-                                except TelegramError, e:
-                                        print(e)
-			# Check if the user is talking to me
-			if message.startswith('scoutbot'):
 
+                        #Check if a command is requested
+                        if message.startswith('/'):
+                            #remove '/' character
+                            command = message[1:]
+                            if command == "help":
+                                reply+=help_message()
+                            elif command == "parolamaestra":
+                                reply+= generateRandomJungleWord()
+                            elif command == "contatti":
+                                reply+= getInfosFromFile()
+                            elif command == "appuntamenti":
+                                reply+= getNextEvents(calendar_id)
+                            else:
+                        	reply+= "scusa, non ho capito cosa mi hai scritto :("
+
+                        #Check if human is talking to me
+                        elif message.startswith('scoutbot'):
 				# Remove my name from message and leading spaces
-				message = message[9:].lstrip()
+				message = message[9:]
 
 				# Check for specific commands
-				if re.match('.*parola maestra.*',message):
+				if re.match('.*(parola maestra).*',message):
 					reply+= generateRandomJungleWord()
 				elif re.match('.*(appuntamenti|riunione|uscita).*',message):
 					reply+= getNextEvents(calendar_id)
 				elif re.match(".*contatti.*", message):
 					reply+= getInfosFromFile()
+                                elif re.match("/help",message):
+                                        reply+=help_message()
 				else:
 					reply+= "scusa, non ho capito cosa mi hai scritto :("
-				try:
-					bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'),parse_mode ="Markdown")
-				except TelegramError, e:
-					print(e)
+			try:
+                            if reply:
+                                bot.sendMessage(chat_id=chat_id, text=reply.encode('utf-8'),parse_mode ="Markdown")
+			except TelegramError, e:
+			    print(e)
 
 if __name__ == '__main__':
     main()
