@@ -164,13 +164,13 @@ def process(bot):
                         if message.startswith('/'):
                             #remove '/' character
                             command = message[1:]
-                            if command == "help":
+                            if command == "help" or command== "help@roma132bot":
                                 reply+=help_message()
-                            elif command == "parolamaestra":
+                            elif command == "parolamaestra" or command== "parolamaestra@roma132bot":
                                 reply+= generateRandomJungleWord()
-                            elif command == "contatti":
+                            elif command == "contatti" or command == "contatti@roma132bot":
                                 reply+= getInfosFromFile()
-                            elif command == "appuntamenti":
+                            elif command == "appuntamenti" or command == "appuntamenti@roma132bot":
                                 reply+= getNextEvents(calendar_id)
                             else:
                         	reply+= "scusa, non ho capito cosa mi hai scritto :("
